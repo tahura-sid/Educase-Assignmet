@@ -18,22 +18,27 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        return cors()(req, res, next);
+    }
+    next();
+});
 app.use(express.json())
 
 mongoose.connect(process.env.ATLAS_URL)
-.then(()=>{
-    console.log("MongoDB Connected")
-}).catch((err)=>{
-    console.log(err)
-})
+    .then(() => {
+        console.log("MongoDB Connected")
+    }).catch((err) => {
+        console.log(err)
+    })
 
-app.get("/", (req,res)=>{
+app.get("/", (req, res) => {
     res.send("Server Running")
 })
 
-app.use("/api/auth",authRoutes)
+app.use("/api/auth", authRoutes)
 
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

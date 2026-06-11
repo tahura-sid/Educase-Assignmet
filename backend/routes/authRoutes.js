@@ -97,10 +97,10 @@ router.post("/login", async(req,res)=>{
         });
 
     }catch(error){
-        console.error("Login Route Error:", error);
-
-        res.status(500).json({
-            message: "Server Error"
+        console.error("DETAILED LOGIN CRASH:", error.message, error.stack);
+    res.status(500).json({ 
+        message: "Server Error", 
+        debugError: error.message
         })
     }
 })

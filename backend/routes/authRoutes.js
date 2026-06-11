@@ -60,7 +60,6 @@ router.post("/signup", async (req, res)=>{
 router.post("/login", async(req,res)=>{
     try{
         const {email, password} = req.body;
-        console.log(req)
 
         //Find the user
         const user = await User.findOne({ email })
@@ -77,6 +76,12 @@ router.post("/login", async(req,res)=>{
                 message:"Invalid Credentials"
             })
         }
+
+        const secret = process.env.JWT_SECRET;
+        if (!secret) {
+            console.error("CRITICAL ERROR: JWT_SECRET environment variable is missing!");
+            return res.status(500).json({ message: "Server configuration error" });
+        }
         //Generate JWT
         const token = jwt.sign(
             {
@@ -92,7 +97,7 @@ router.post("/login", async(req,res)=>{
         });
 
     }catch(error){
-        console.log(error)
+        console.error("Login Route Error:", error);
 
         res.status(500).json({
             message: "Server Error"

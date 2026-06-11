@@ -9,7 +9,10 @@ const User = require("./models/User")
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+    origin:"https://bright-torrone-ea4e7c.netlify.app/",
+    credentials: true
+}))
 app.use(express.json())
 
 mongoose.connect(process.env.ATLAS_URL)
